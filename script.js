@@ -37,16 +37,20 @@ async function init() {
   const dexRows = parseCSV(dexText);
   const chartRows = parseCSV(chartText);
 
-  console.log("Dex rows:", dexRows.length);
-  console.log("Type chart rows:", chartRows.length);
-
   /* =========================
      BUILD POKEMON_TYPES
      ========================= */
-  const header = dexRows[0];
+
+  const header = dexRows[0].map(h => h.trim());
   const nameIdx = header.indexOf("Name");
-  const type1Idx = header.indexOf("Type 1");
-  const type2Idx = header.indexOf("Type 2");
+
+  // Collect ALL type columns (Type 1, Type 2, Type 3, ...)
+  const typeIndices = [];
+  header.forEach((h, i) => {
+    if (h.startsWith("Type")) {
+      typeIndices.push(i);
+    }
+  });
 
   const POKEMON_TYPES = {};
 
@@ -56,8 +60,10 @@ async function init() {
     if (!name) continue;
 
     const types = [];
-    if (row[type1Idx]) types.push(norm(row[type1Idx]));
-    if (row[type2Idx]) types.push(norm(row[type2Idx]));
+    for (const idx of typeIndices) {
+      const t = norm(row[idx]);
+      if (t) types.push(t);
+    }
 
     if (types.length > 0) {
       POKEMON_TYPES[name] = types;
@@ -71,17 +77,19 @@ async function init() {
      BUILD TYPE_CHART
      ========================= */
 
-  // Defenders: row 2 (index 1), columns C–CD (2–81)
-  const defendingTypes = chartRows[1]
-    .slice(2, 82)
-    .map(norm)
-    .filter(Boolean);
+  // Defenders: row 2, columns C–CD (indexes 2–81)
+  const defendingTypes = [];
+  for (let col = 2; col <= 81; col++) {
+    const name = norm(chartRows[1][col]);
+    if (name) defendingTypes.push(name);
+  }
 
-  // Attackers: column B (index 1), rows 3–82 (2–81)
-  const attackingTypes = chartRows
-    .slice(2, 82)
-    .map(row => norm(row[1]))
-    .filter(Boolean);
+  // Attackers: column B, rows 3–82 (indexes 2–81)
+  const attackingTypes = [];
+  for (let row = 2; row <= 81; row++) {
+    const name = norm(chartRows[row][1]);
+    if (name) attackingTypes.push(name);
+  }
 
   const TYPE_CHART = {};
 
@@ -99,10 +107,10 @@ async function init() {
     }
   }
 
-  console.log("Loaded attacking types:", Object.keys(TYPE_CHART).length);
+  console.log("Loaded attacking types:", attackingTypes.length);
+  console.log("Loaded defending types:", defendingTypes.length);
   console.log("FIRE sample:", TYPE_CHART["FIRE"]);
 
-  /* Keep globals for next steps */
   window.POKEMON_TYPES = POKEMON_TYPES;
   window.TYPE_CHART = TYPE_CHART;
 }
