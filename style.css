@@ -20,25 +20,34 @@ h1 {
   margin-bottom: 1rem;
 }
 
+/* =========================
+   TEAM INPUTS
+   ========================= */
+
 #team-inputs {
   background: var(--panel);
   padding: 1rem;
   border: 1px solid var(--border);
   border-radius: 8px;
-  display: grid;
-  grid-template-columns: repeat(6, 1fr) auto;
+  display: flex;
+  flex-direction: column;
   gap: 0.5rem;
-  margin-bottom: 1rem;
+  max-width: 420px;
+  margin-bottom: 1.5rem;
 }
 
 #team-inputs input {
-  padding: 0.4rem;
+  padding: 0.5rem;
   border: 1px solid var(--border);
   border-radius: 6px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 #team-inputs button {
-  padding: 0.4rem 0.75rem;
+  margin-top: 0.5rem;
+  align-self: flex-start;
+  padding: 0.5rem 1rem;
   border: none;
   border-radius: 6px;
   background: #2563eb;
@@ -50,11 +59,19 @@ h1 {
   background: #1d4ed8;
 }
 
+/* =========================
+   RESULTS LAYOUT
+   ========================= */
+
 #results {
-  display: grid;
-  grid-template-columns: auto 220px;
+  display: inline-flex;
+  align-items: flex-start;
   gap: 1rem;
 }
+
+/* =========================
+   TABLES
+   ========================= */
 
 table {
   background: var(--panel);
@@ -78,6 +95,10 @@ td {
   background: var(--neutral);
 }
 
+/* =========================
+   MULTIPLIERS
+   ========================= */
+
 .mult-0 {
   background: var(--immune);
   color: white;
@@ -94,15 +115,14 @@ td {
   background: var(--weak);
 }
 
+/* =========================
+   CONTAINERS
+   ========================= */
+
 #grid-container {
   overflow-x: auto;
 }
 
 #summary-container table {
-  width: 100%;
-}
-
-#summary-container th {
-  position: sticky;
-  top: 0;
+  width: auto;
 }
