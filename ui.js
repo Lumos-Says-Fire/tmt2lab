@@ -71,4 +71,10 @@ function analyzeTeam() {
 
 document.getElementById("analyze").addEventListener("click", analyzeTeam);
 
-buildDatalist();
+const waitForData = setInterval(() => {
+  if (window.POKEMON_TYPES && window.TYPE_CHART) {
+    clearInterval(waitForData);
+    buildDatalist();
+  }
+}, 50);
+
