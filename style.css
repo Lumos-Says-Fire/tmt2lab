@@ -1,12 +1,12 @@
 :root {
-  --bg: #f8fafc;
-  --panel: #ffffff;
+  --bg: #273e61;
+  --panel: #436291;
   --border: #d1d5db;
-  --header: #e5e7eb;
+  --header: #1e304a;
   --neutral: #f3f4f6;
   --weak: #fee2e2;
-  --resist: #dbeafe;
-  --immune: #111827;
+  --resist: #d0fccc;
+  --immune: #808080;
 }
 
 body {
