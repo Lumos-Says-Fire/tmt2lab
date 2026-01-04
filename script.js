@@ -5,25 +5,23 @@ const TYPE_CHART_URL = "Too Many Types 2 Documentation - Type Chart.csv";
    HELPERS
    ========================= */
 
-function norm(value) {
-  if (value === null || value === undefined) return null;
-  return String(value)
+function norm(v) {
+  if (v === null || v === undefined) return null;
+  return String(v)
     .replace(/\r/g, "")
     .replace(/\n/g, "")
     .trim()
     .toUpperCase();
 }
 
-function parseCSV(text) {
-  return text
-    .split("\n")
-    .map(line => line.split(","));
-}
-
 async function loadCSV(url) {
   const res = await fetch(url);
   if (!res.ok) throw new Error(`Failed to load ${url}`);
-  return await res.text();
+  const text = await res.text();
+
+  return Papa.parse(text, {
+    skipEmptyLines: true
+  }).data;
 }
 
 /* =========================
@@ -31,11 +29,8 @@ async function loadCSV(url) {
    ========================= */
 
 async function init() {
-  const dexText = await loadCSV(DEX_URL);
-  const chartText = await loadCSV(TYPE_CHART_URL);
-
-  const dexRows = parseCSV(dexText);
-  const chartRows = parseCSV(chartText);
+  const dexRows = await loadCSV(DEX_URL);
+  const chartRows = await loadCSV(TYPE_CHART_URL);
 
   /* =========================
      POKEMON TYPES
@@ -76,24 +71,18 @@ async function init() {
      TYPE CHART
      ========================= */
 
-  // ---- DEFENDERS ----
-  // Row 2 (index 1), starting at column C (index 2)
+  // Defenders: row 2 (index 1), column C onward (index 2+)
   const defendingTypes = [];
-  let col = 2;
-
-  while (col < chartRows[1].length) {
-    const raw = chartRows[1][col];
-    const name = norm(raw);
-    if (!name) break; // defender list ends here
+  for (let c = 2; c < chartRows[1].length; c++) {
+    const name = norm(chartRows[1][c]);
+    if (!name) break;
     defendingTypes.push(name);
-    col++;
   }
 
-  // ---- ATTACKERS ----
-  // Column B (index 1), rows 3–82 (indexes 2–81 inclusive)
+  // Attackers: column B (index 1), rows 3–82 (indexes 2–81)
   const attackingTypes = [];
-  for (let row = 2; row <= 81 && row < chartRows.length; row++) {
-    const name = norm(chartRows[row][1]);
+  for (let r = 2; r <= 81 && r < chartRows.length; r++) {
+    const name = norm(chartRows[r][1]);
     if (name) attackingTypes.push(name);
   }
 
@@ -118,9 +107,15 @@ async function init() {
   console.log("Loaded defending types:", defendingTypes.length);
   console.log("FIRE sample:", TYPE_CHART["FIRE"]);
 
-  // Expose for UI
   window.POKEMON_TYPES = POKEMON_TYPES;
   window.TYPE_CHART = TYPE_CHART;
 }
 
-init();
+/* =========================
+   LOAD PAPAPARSE + START
+   ========================= */
+
+const script = document.createElement("script");
+script.src = "https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js";
+script.onload = init;
+document.head.appendChild(script);
