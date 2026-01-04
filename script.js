@@ -71,15 +71,16 @@ async function init() {
      TYPE CHART
      ========================= */
 
-  // Defenders: row 2 (index 1), column C onward (index 2+)
+  // ---- DEFENDERS ----
+  // Row 2 (index 1), columns C → CD (indexes 2 → 81)
   const defendingTypes = [];
-  for (let c = 2; c < chartRows[1].length; c++) {
+  for (let c = 2; c <= 81; c++) {
     const name = norm(chartRows[1][c]);
-    if (!name) break;
-    defendingTypes.push(name);
+    if (name) defendingTypes.push(name);
   }
 
-  // Attackers: column B (index 1), rows 3–82 (indexes 2–81)
+  // ---- ATTACKERS ----
+  // Column B (index 1), rows 3 → 82 (indexes 2 → 81)
   const attackingTypes = [];
   for (let r = 2; r <= 81 && r < chartRows.length; r++) {
     const name = norm(chartRows[r][1]);
