@@ -60,18 +60,31 @@ function analyzeTeam() {
       row.innerHTML += `<td class="${multClass(m)}">${m}</td>`;
     });
 
-const teamSize = team.length;
-
-  if (weak >= Math.ceil(teamSize / 2)) {
-    row.classList.add("team-bad");
-  } else if (resist >= Math.ceil(teamSize / 2)) {
-    row.classList.add("team-good");
-  }
-
     grid.appendChild(row);
 
     const srow = document.createElement("tr");
-    srow.innerHTML = `<th>${atk}</th><td>${weak}</td><td>${resist}</td><td>${immune}</td>`;
+const th = document.createElement("th");
+th.textContent = atk;
+
+const weakTd = document.createElement("td");
+weakTd.textContent = weak;
+
+const resistTd = document.createElement("td");
+resistTd.textContent = resist;
+
+const immuneTd = document.createElement("td");
+immuneTd.textContent = immune;
+
+const majority = Math.ceil(team.length / 2);
+
+if (weak >= majority) weakTd.classList.add("team-bad");
+if (resist >= majority) resistTd.classList.add("team-good");
+if (immune >= majority) immuneTd.classList.add("team-good");
+
+srow.appendChild(th);
+srow.appendChild(weakTd);
+srow.appendChild(resistTd);
+srow.appendChild(immuneTd);
     summary.appendChild(srow);
   });
 
