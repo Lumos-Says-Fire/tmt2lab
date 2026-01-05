@@ -60,6 +60,15 @@ function analyzeTeam() {
       row.innerHTML += `<td class="${multClass(m)}">${m}</td>`;
     });
 
+const teamSize = team.length;
+let rowClass = "";
+
+if (weak >= Math.ceil(teamSize / 2)) {
+  rowClass = "team-bad";
+} else if (resist >= Math.ceil(teamSize / 2)) {
+  rowClass = "team-good";
+}
+
     grid.appendChild(row);
 
     const srow = document.createElement("tr");
