@@ -105,15 +105,15 @@ td {
   color: var(--text-main);
 }
 
-.team-good td,
-.team-good th {
+td.team-good,
+th.team-good {
   background: var(--resist) !important;
   color: var(--text-main);
   font-weight: 600;
 }
 
-.team-bad td,
-.team-bad th {
+td.team-bad,
+th.team-bad {
   background: var(--weak) !important;
   color: var(--text-main);
   font-weight: 600;
