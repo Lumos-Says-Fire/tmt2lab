@@ -61,13 +61,12 @@ function analyzeTeam() {
     });
 
 const teamSize = team.length;
-let rowClass = "";
 
-if (weak >= Math.ceil(teamSize / 2)) {
-  rowClass = "team-bad";
-} else if (resist >= Math.ceil(teamSize / 2)) {
-  rowClass = "team-good";
-}
+  if (weak >= Math.ceil(teamSize / 2)) {
+    row.classList.add("team-bad");
+  } else if (resist >= Math.ceil(teamSize / 2)) {
+    row.classList.add("team-good");
+  }
 
     grid.appendChild(row);
 
