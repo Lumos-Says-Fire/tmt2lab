@@ -9,6 +9,35 @@ function buildDatalist() {
     });
 }
 
+function updateTypeDisplay(input, typeDisplay) {
+  const pokemonName = input.value.trim().toUpperCase();
+  const types = POKEMON_TYPES[pokemonName];
+  
+  if (types && types.length > 0) {
+    typeDisplay.textContent = types.join(" / ");
+    typeDisplay.style.display = "inline";
+  } else {
+    typeDisplay.textContent = "";
+    typeDisplay.style.display = "none";
+  }
+}
+
+function setupTypeDisplays() {
+  const rows = document.querySelectorAll(".pokemon-input-row");
+  rows.forEach(row => {
+    const input = row.querySelector("input");
+    const typeDisplay = row.querySelector(".type-display");
+    
+    input.addEventListener("input", () => {
+      updateTypeDisplay(input, typeDisplay);
+    });
+    
+    input.addEventListener("blur", () => {
+      updateTypeDisplay(input, typeDisplay);
+    });
+  });
+}
+
 function getMultiplier(attacking, defendingTypes) {
   let mult = 1;
   for (const def of defendingTypes) {
@@ -63,28 +92,28 @@ function analyzeTeam() {
     grid.appendChild(row);
 
     const srow = document.createElement("tr");
-const th = document.createElement("th");
-th.textContent = atk;
+    const th = document.createElement("th");
+    th.textContent = atk;
 
-const weakTd = document.createElement("td");
-weakTd.textContent = weak;
+    const weakTd = document.createElement("td");
+    weakTd.textContent = weak;
 
-const resistTd = document.createElement("td");
-resistTd.textContent = resist;
+    const resistTd = document.createElement("td");
+    resistTd.textContent = resist;
 
-const immuneTd = document.createElement("td");
-immuneTd.textContent = immune;
+    const immuneTd = document.createElement("td");
+    immuneTd.textContent = immune;
 
-const majority = Math.ceil(team.length / 2);
+    const majority = Math.ceil(team.length / 2);
 
-if (weak >= majority) weakTd.classList.add("team-bad");
-if (resist >= majority) resistTd.classList.add("team-good");
-if (immune >= majority) immuneTd.classList.add("team-good");
+    if (weak >= majority) weakTd.classList.add("team-bad");
+    if (resist >= majority) resistTd.classList.add("team-good");
+    if (immune >= majority) immuneTd.classList.add("team-good");
 
-srow.appendChild(th);
-srow.appendChild(weakTd);
-srow.appendChild(resistTd);
-srow.appendChild(immuneTd);
+    srow.appendChild(th);
+    srow.appendChild(weakTd);
+    srow.appendChild(resistTd);
+    srow.appendChild(immuneTd);
     summary.appendChild(srow);
   });
 
@@ -98,6 +127,6 @@ const waitForData = setInterval(() => {
   if (window.POKEMON_TYPES && window.TYPE_CHART) {
     clearInterval(waitForData);
     buildDatalist();
+    setupTypeDisplays();
   }
 }, 50);
-
