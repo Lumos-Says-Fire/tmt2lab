@@ -39,11 +39,23 @@ function setupTypeDisplays() {
 }
 
 function getMultiplier(attacking, defendingTypes) {
+  // Check if UNO REVERSE is in the types
+  const hasUnoReverse = defendingTypes.includes("UNO REVERSE");
+  
+  // Filter out UNO REVERSE for calculation
+  const typesForCalc = defendingTypes.filter(t => t !== "UNO REVERSE");
+  
   let mult = 1;
-  for (const def of defendingTypes) {
+  for (const def of typesForCalc) {
     const m = TYPE_CHART[attacking]?.[def];
     if (m !== undefined) mult *= m;
   }
+  
+  // If UNO REVERSE is present, invert the multiplier (except 0 and 1)
+  if (hasUnoReverse && mult !== 0 && mult !== 1) {
+    mult = 1 / mult;
+  }
+  
   return mult;
 }
 
