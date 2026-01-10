@@ -67,6 +67,28 @@ input::placeholder {
   min-width: 200px;
 }
 
+.ability-checkbox {
+  margin-left: 1rem;
+  margin-bottom: 0.25rem;
+  display: none;
+}
+
+.ability-checkbox.visible {
+  display: block;
+}
+
+.ability-checkbox label {
+  color: var(--text-header);
+  font-size: 0.85rem;
+  cursor: pointer;
+  user-select: none;
+}
+
+.ability-checkbox input[type="checkbox"] {
+  margin-right: 0.5rem;
+  cursor: pointer;
+}
+
 #team-inputs button {
   margin-top: 0.5rem;
   align-self: flex-start;
